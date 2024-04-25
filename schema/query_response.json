@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QueryResponse",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "count_response"
+      ],
+      "properties": {
+        "count_response": {
+          "$ref": "#/definitions/CountResponse"
+        }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "definitions": {
+    "CountResponse": {
+      "type": "object",
+      "required": [
+        "count"
+      ],
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}
