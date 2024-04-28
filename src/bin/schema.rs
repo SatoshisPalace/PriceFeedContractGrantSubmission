@@ -2,6 +2,13 @@ use std::env::current_dir;
 use std::fs::create_dir_all;
 
 use cosmwasm_schema::{export_schema, remove_schemas, schema_for};
+use sp_price_feed::{
+    msgs::{
+        execute::execute_msg::ExecuteMsg, instantiate_msg::InstantiateMsg,
+        query::query_msg::QueryMsg,
+    },
+    responses::{execute::execute_response::ExecuteResponse, query::query_response::QueryResponse},
+};
 
 fn main() {
     let mut out_dir = current_dir().unwrap();

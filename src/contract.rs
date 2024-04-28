@@ -18,7 +18,7 @@ pub fn instantiate(
     info: MessageInfo,
     msg: InstantiateMsg,
 ) -> StdResult<Response> {
-    Reclaim::new(&msg.reclaim_contract).singleton_save(deps.storage);
+    Reclaim::new(&msg.reclaim_contract).singleton_save(deps.storage)?;
     Ok(Response::default())
 }
 

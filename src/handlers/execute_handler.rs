@@ -3,6 +3,9 @@ use sp_secret_toolkit::reclaim::Reclaim;
 
 use crate::{
     msgs::execute::commands::post_price::PostPrice,
+    responses::execute::{
+        current_count_response::PostPriceResponse, execute_response::ExecuteResponse,
+    },
     services::price_posting_service::add_price_posting,
 };
 
@@ -14,5 +17,6 @@ pub fn handle_post_price(deps: DepsMut, command: PostPrice) -> StdResult<Respons
     //Verify proof afterwords, all will be reverted if proof fails validation
     let reclaim = Reclaim::singleton_load(deps.storage)?;
     let msg = reclaim.create_verify_proof_msg(&proof)?;
+
     Ok(Response::default().add_message(msg))
 }
