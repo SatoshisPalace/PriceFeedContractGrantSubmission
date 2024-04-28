@@ -4,7 +4,7 @@ pub mod tests {
         contract::instantiate,
         handlers::{
             execute_handler::{handle_increment, handle_set_count},
-            query_handlers::handle_get_count_query,
+            query_handlers::handle_get_most_recent_price,
         },
         msgs::{execute::reset::Reset, instantiate_msg::InstantiateMsg},
         responses::query::count_response::CountResponse,
@@ -55,7 +55,7 @@ pub mod tests {
         }
 
         pub fn assert_count_is(&mut self, expected_count: &i32) {
-            let result = handle_get_count_query(self.deps.as_ref());
+            let result = handle_get_most_recent_price(self.deps.as_ref());
             assert!(result.is_ok());
             let response: CountResponse = from_binary(&result.unwrap()).unwrap();
             assert_eq!(response.count, *expected_count);

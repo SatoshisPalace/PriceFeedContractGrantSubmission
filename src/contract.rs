@@ -1,11 +1,10 @@
-use cosmwasm_std::{entry_point, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
+use cosmwasm_std::{
+    entry_point, Binary, Deps, DepsMut, Env, MessageInfo, Reply, Response, StdResult,
+};
+use sp_secret_toolkit::reclaim::Reclaim;
 
 use crate::{
-    data::state::State,
-    handlers::{
-        execute_handler::{handle_increment, handle_set_count},
-        query_handlers::handle_get_count_query,
-    },
+    handlers::{execute_handler::handle_post_price, query_handlers::handle_get_most_recent_price},
     msgs::{
         execute::execute_msg::ExecuteMsg, instantiate_msg::InstantiateMsg,
         query::query_msg::QueryMsg,
@@ -19,9 +18,7 @@ pub fn instantiate(
     info: MessageInfo,
     msg: InstantiateMsg,
 ) -> StdResult<Response> {
-    let state = State::new(msg.count, info.sender.clone());
-    state.singleton_save(deps.storage)?;
-
+    Reclaim::new(&msg.reclaim_contract).singleton_save(deps.storage);
     Ok(Response::default())
 }
 
@@ -33,14 +30,13 @@ pub fn execute(
     msg: ExecuteMsg,
 ) -> StdResult<Response> {
     match msg {
-        ExecuteMsg::Increment(_) => handle_increment(&mut deps),
-        ExecuteMsg::Reset(reset_command) => handle_set_count(&mut deps, reset_command),
+        ExecuteMsg::PostPrice(command) => handle_post_price(deps, command),
     }
 }
 
 #[entry_point]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
-        QueryMsg::GetCount(_) => handle_get_count_query(deps),
+        QueryMsg::GetMostRecentPrice(_) => handle_get_most_recent_price(deps),
     }
 }

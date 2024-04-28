@@ -1,19 +1,18 @@
 use cosmwasm_std::{DepsMut, Response, StdResult};
+use sp_secret_toolkit::reclaim::Reclaim;
 
 use crate::{
-    msgs::execute::reset::Reset,
-    responses::execute::current_count_response::CurrentCountResponse,
-    services::state_service::{increment_counter, set_counter},
+    msgs::execute::commands::post_price::PostPrice,
+    services::price_posting_service::add_price_posting,
 };
 
-pub fn handle_increment(deps: &mut DepsMut) -> StdResult<Response> {
-    let current_count = increment_counter(deps.storage)?;
-    let data = CurrentCountResponse { current_count };
-    Ok(Response::default().set_data(data))
-}
+pub fn handle_post_price(deps: DepsMut, command: PostPrice) -> StdResult<Response> {
+    let PostPrice { proof } = command;
 
-pub fn handle_set_count(deps: &mut DepsMut, reset_msg: Reset) -> StdResult<Response> {
-    let current_count = set_counter(deps.storage, &reset_msg.count)?;
-    let data = CurrentCountResponse { current_count };
-    Ok(Response::default().set_data(data))
+    add_price_posting(deps.storage, &proof)?;
+
+    //Verify proof afterwords, all will be reverted if proof fails validation
+    let reclaim = Reclaim::singleton_load(deps.storage)?;
+    let msg = reclaim.create_verify_proof_msg(&proof)?;
+    Ok(Response::default().add_message(msg))
 }

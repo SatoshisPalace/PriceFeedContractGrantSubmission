@@ -1,10 +1,7 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-
-use super::commands::post_price::PostPrice;
-
+use sp_secret_toolkit::reclaim::data::claim::Proof;
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-pub enum ExecuteMsg {
-    PostPrice(PostPrice),
+pub struct PostPrice {
+    pub proof: Proof,
 }
