@@ -5,18 +5,18 @@
     {
       "type": "object",
       "required": [
-        "get_count"
+        "get_most_recent_price"
       ],
       "properties": {
-        "get_count": {
-          "$ref": "#/definitions/GetCount"
+        "get_most_recent_price": {
+          "$ref": "#/definitions/GetMostRecentPrice"
         }
       },
       "additionalProperties": false
     }
   ],
   "definitions": {
-    "GetCount": {
+    "GetMostRecentPrice": {
       "type": "object"
     }
   }

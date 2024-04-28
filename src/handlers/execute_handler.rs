@@ -3,9 +3,6 @@ use sp_secret_toolkit::reclaim::Reclaim;
 
 use crate::{
     msgs::execute::commands::post_price::PostPrice,
-    responses::execute::{
-        current_count_response::PostPriceResponse, execute_response::ExecuteResponse,
-    },
     services::price_posting_service::add_price_posting,
 };
 

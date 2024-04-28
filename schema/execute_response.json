@@ -5,28 +5,34 @@
     {
       "type": "object",
       "required": [
-        "current_count_response"
+        "post_price_response"
       ],
       "properties": {
-        "current_count_response": {
-          "$ref": "#/definitions/CurrentCountResponse"
+        "post_price_response": {
+          "$ref": "#/definitions/PostPriceResponse"
         }
       },
       "additionalProperties": false
     }
   ],
   "definitions": {
-    "CurrentCountResponse": {
+    "PostPriceResponse": {
       "type": "object",
       "required": [
-        "current_count"
+        "status"
       ],
       "properties": {
-        "current_count": {
-          "type": "integer",
-          "format": "int32"
+        "status": {
+          "$ref": "#/definitions/ResponseStatus"
         }
       }
+    },
+    "ResponseStatus": {
+      "type": "string",
+      "enum": [
+        "success",
+        "failure"
+      ]
     }
   }
 }

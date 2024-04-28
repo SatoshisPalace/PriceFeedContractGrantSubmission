@@ -1,6 +1,4 @@
-use cosmwasm_std::{
-    entry_point, Binary, Deps, DepsMut, Env, MessageInfo, Reply, Response, StdResult,
-};
+use cosmwasm_std::{entry_point, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
 use sp_secret_toolkit::reclaim::Reclaim;
 
 use crate::{
@@ -15,7 +13,7 @@ use crate::{
 pub fn instantiate(
     deps: DepsMut,
     _env: Env,
-    info: MessageInfo,
+    _info: MessageInfo,
     msg: InstantiateMsg,
 ) -> StdResult<Response> {
     Reclaim::new(&msg.reclaim_contract).singleton_save(deps.storage)?;
@@ -24,7 +22,7 @@ pub fn instantiate(
 
 #[entry_point]
 pub fn execute(
-    mut deps: DepsMut,
+    deps: DepsMut,
     _env: Env,
     _info: MessageInfo,
     msg: ExecuteMsg,

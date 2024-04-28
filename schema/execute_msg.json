@@ -5,41 +5,104 @@
     {
       "type": "object",
       "required": [
-        "increment"
+        "post_price"
       ],
       "properties": {
-        "increment": {
-          "$ref": "#/definitions/Increment"
-        }
-      },
-      "additionalProperties": false
-    },
-    {
-      "type": "object",
-      "required": [
-        "reset"
-      ],
-      "properties": {
-        "reset": {
-          "$ref": "#/definitions/Reset"
+        "post_price": {
+          "$ref": "#/definitions/PostPrice"
         }
       },
       "additionalProperties": false
     }
   ],
   "definitions": {
-    "Increment": {
-      "type": "object"
-    },
-    "Reset": {
+    "ClaimInfo": {
       "type": "object",
       "required": [
-        "count"
+        "context",
+        "parameters",
+        "provider"
       ],
       "properties": {
-        "count": {
+        "context": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "string"
+        },
+        "provider": {
+          "type": "string"
+        }
+      }
+    },
+    "CompleteClaimData": {
+      "type": "object",
+      "required": [
+        "epoch",
+        "identifier",
+        "owner",
+        "timestampS"
+      ],
+      "properties": {
+        "epoch": {
           "type": "integer",
-          "format": "int32"
+          "format": "uint64",
+          "minimum": 0.0
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "timestampS": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0.0
+        }
+      }
+    },
+    "PostPrice": {
+      "type": "object",
+      "required": [
+        "proof"
+      ],
+      "properties": {
+        "proof": {
+          "$ref": "#/definitions/Proof"
+        }
+      }
+    },
+    "Proof": {
+      "type": "object",
+      "required": [
+        "claimInfo",
+        "signedClaim"
+      ],
+      "properties": {
+        "claimInfo": {
+          "$ref": "#/definitions/ClaimInfo"
+        },
+        "signedClaim": {
+          "$ref": "#/definitions/SignedClaim"
+        }
+      }
+    },
+    "SignedClaim": {
+      "type": "object",
+      "required": [
+        "claim",
+        "signatures"
+      ],
+      "properties": {
+        "claim": {
+          "$ref": "#/definitions/CompleteClaimData"
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

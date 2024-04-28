@@ -5,26 +5,44 @@
     {
       "type": "object",
       "required": [
-        "count_response"
+        "most_recent_price_response"
       ],
       "properties": {
-        "count_response": {
-          "$ref": "#/definitions/CountResponse"
+        "most_recent_price_response": {
+          "$ref": "#/definitions/MostRecentPriceResponse"
         }
       },
       "additionalProperties": false
     }
   ],
   "definitions": {
-    "CountResponse": {
+    "MostRecentPriceResponse": {
       "type": "object",
       "required": [
-        "count"
+        "price_posting"
       ],
       "properties": {
-        "count": {
+        "price_posting": {
+          "$ref": "#/definitions/PricePosting"
+        }
+      }
+    },
+    "PricePosting": {
+      "type": "object",
+      "required": [
+        "price",
+        "time"
+      ],
+      "properties": {
+        "price": {
           "type": "integer",
-          "format": "int32"
+          "format": "uint32",
+          "minimum": 0.0
+        },
+        "time": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0.0
         }
       }
     }
