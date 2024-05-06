@@ -15,6 +15,9 @@ pub enum PricePostingError {
 
     #[error("Price not found or invalid format")]
     PriceNotFound,
+
+    #[error(transparent)]
+    JsonParsingError(#[from] simd_json::Error),
 }
 
 impl From<PricePostingError> for cosmwasm_std::StdError {

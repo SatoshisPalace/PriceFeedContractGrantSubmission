@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use thiserror::Error;
 
 #[derive(Error, Debug, PartialEq)]
@@ -7,6 +9,23 @@ pub enum HttpProviderParamsV2Error {
 
     #[error("Method does not match expected Method: expected {expected}, got {actual}")]
     MethodMismatchError { expected: String, actual: String },
+
+    #[error("URL parsing error: {error}")]
+    UrlParseError { error: String },
+
+    #[error("Query parameters mismatch: expected {expected:?}, got {actual:?}")]
+    QueryParamMismatchError {
+        expected: HashSet<(String, String)>,
+        actual: HashSet<(String, String)>,
+    },
+    #[error("Query parameters key mismatch: expected {expected:?}, got {actual:?}")]
+    QueryParamKeyMismatchError {
+        expected: HashSet<String>,
+        actual: HashSet<String>,
+    },
+
+    #[error("Base URL with path does not match expected URL: expected {expected}, got {actual}")]
+    BaseUrlWithPathMismatchError { expected: String, actual: String },
 }
 
 impl From<HttpProviderParamsV2Error> for cosmwasm_std::StdError {
