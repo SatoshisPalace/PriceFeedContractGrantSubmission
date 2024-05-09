@@ -2,7 +2,7 @@ use cosmwasm_std::{entry_point, Binary, Deps, DepsMut, Env, MessageInfo, Respons
 use sp_secret_toolkit::reclaim::Reclaim;
 
 use crate::{
-    handlers::{execute_handler::handle_post_price, query_handlers::handle_get_most_recent_price},
+    handlers::{execute_handler::handle_post_price, query_handlers::{handle_get_most_recent_price, handle_get_prices_by_ids}},
     msgs::{
         execute::execute_msg::ExecuteMsg, instantiate_msg::InstantiateMsg,
         query::query_msg::QueryMsg,
@@ -36,5 +36,6 @@ pub fn execute(
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
         QueryMsg::GetMostRecentPrice(_) => handle_get_most_recent_price(deps),
+        QueryMsg::GetPricesByIds(command) => handle_get_prices_by_ids(deps, command),
     }
 }

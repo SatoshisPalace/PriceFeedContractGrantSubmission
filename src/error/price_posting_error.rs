@@ -1,6 +1,6 @@
 use thiserror::Error;
 
-use super::http_provider_params_error::HttpProviderParamsV2Error;
+use sp_secret_toolkit::reclaim::error::http_provider_params_error::HttpProviderParamsV2Error;
 
 #[derive(Error, Debug)]
 pub enum PricePostingError {
@@ -15,6 +15,9 @@ pub enum PricePostingError {
 
     #[error("Price not found or invalid format")]
     PriceNotFound,
+
+    #[error("Price type error: {error}")]
+    PriceTypeError{error: String},
 
     #[error(transparent)]
     JsonParsingError(#[from] simd_json::Error),

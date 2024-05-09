@@ -13,11 +13,39 @@
         }
       },
       "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "get_prices_by_ids"
+      ],
+      "properties": {
+        "get_prices_by_ids": {
+          "$ref": "#/definitions/GetPricesByIds"
+        }
+      },
+      "additionalProperties": false
     }
   ],
   "definitions": {
     "GetMostRecentPrice": {
       "type": "object"
+    },
+    "GetPricesByIds": {
+      "type": "object",
+      "required": [
+        "ids"
+      ],
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0
+          }
+        }
+      }
     }
   }
 }
