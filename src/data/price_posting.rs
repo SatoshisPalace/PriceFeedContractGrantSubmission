@@ -16,6 +16,12 @@ impl PricePosting {
     pub fn new(price: Decimal, time: u64) -> Self {
         PricePosting { price, time }
     }
+    pub fn get_price(&self) -> &Decimal {
+        &self.price
+    }
+    pub fn get_time(&self) -> &u64 {
+        &self.time
+    }
 }
 
 impl Identifiable for PricePosting {
