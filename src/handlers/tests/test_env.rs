@@ -63,7 +63,7 @@ pub mod tests {
             );        
         }
 
-        pub fn get_most_recent_price_success(&mut self, price: PricePosting) {
+        pub fn get_most_recent_price_success(&mut self, expected_price: PricePosting) {
 
                 let response_result = handle_get_most_recent_price(self.deps.as_ref());
                 assert!(
@@ -77,7 +77,7 @@ pub mod tests {
                             // Successfully deserialized and matched the Claim variant.
                             // You can now use `claim_data` here.
                             assert_eq!(
-                                response.price_posting, price,
+                                response.price_posting, expected_price,
                                 "Expected Different Price Info"
                             )
                         }
@@ -94,7 +94,11 @@ pub mod tests {
                 "Expected a failure, but succeeded"
             );
         }
-        pub fn get_prices_by_ids_success(&mut self, prices: Vec<PricePosting>, command: GetPricesByIds) {
+        pub fn get_prices_by_ids_success(&mut self, expected_prices: Vec<PricePosting>, ids: Vec<u64>) {
+            
+            let command = GetPricesByIds{
+                ids
+            };
 
             let response_result = handle_get_prices_by_ids(self.deps.as_ref(), command);
             assert!(
@@ -108,7 +112,7 @@ pub mod tests {
                         // Successfully deserialized and matched the Claim variant.
                         // You can now use `claim_data` here.
                         assert_eq!(
-                            response.prices, prices,
+                            response.prices, expected_prices,
                             "Expected Different prices"
                         )
                     }
@@ -117,7 +121,11 @@ pub mod tests {
                 Err(_e) => assert!(false, "Could not deserialize prices response"),
             }
         }
-        pub fn get_prices_by_ids_failure(&mut self, command: GetPricesByIds) {
+        pub fn get_prices_by_ids_failure(&mut self, ids: Vec<u64>) {
+            let command = GetPricesByIds{
+                ids
+            };
+
             let response_result = handle_get_prices_by_ids(self.deps.as_ref(), command);
             assert!(
                 response_result.is_err(),
