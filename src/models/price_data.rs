@@ -68,48 +68,41 @@ fn clean_json_string(input_str: &str) -> String {
     let mut start_index = 0;
     let mut prev_char = '\0'; // Track the previous character
 
-    for (i, c) in json_str.chars().enumerate() {
-        match c {
+    for (_index, character) in json_str.chars().enumerate() {
+        match character {
             // Handle digits when not currently in a number
             '0'..='9' if !in_number && prev_char == ':' => {
                 in_number = true;
                 has_decimal = false;
                 start_index = result.len(); // Note where this number starts in the result
-                result.push(c);
+                result.push(character);
             },
             // Handle digits when already in a number
             '0'..='9' if in_number => {
-                result.push(c);
+                result.push(character);
             },
             // Handle the decimal point if it's part of a number and no decimal point has been added yet
             '.' if in_number && !has_decimal => {
                 has_decimal = true;
-                result.push(c);
+                result.push(character);
             },
             // Handle the end of a number sequence
             _ if in_number => {
                 // If the number has a decimal and ends with a comma
-                if has_decimal && c == ',' {
+                if has_decimal && character == ',' {
                     result.insert(start_index, '"'); // Insert opening quote at start of number
                     result.push('"'); // Append closing quote
                 }
-                result.push(c); // Push the current character which ended the number
+                result.push(character); // Push the current character which ended the number
                 in_number = false; // Reset flags
                 has_decimal = false;
             },
             // Default case for any character that's not part of a number
-            _ => result.push(c),
+            _ => result.push(character),
         }
 
-        prev_char = c; // Update the previous character
+        prev_char = character; // Update the previous character
 
-        // Handle the final character if it ends a number
-        if in_number && i == json_str.len() - 1 {
-            if has_decimal {
-                result.insert(start_index, '"'); // Ensure the number is enclosed in quotes
-                result.push('"');
-            }
-        }
     }
 
     result

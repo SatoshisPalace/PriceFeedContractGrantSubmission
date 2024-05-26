@@ -21,6 +21,7 @@ overflow-checks = true
 [features]
 schema = []
 default = []
+testing = []
 
 [dependencies]
 schemars = { version = "0.8.11" }

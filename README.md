@@ -14,6 +14,35 @@ make test
 ```
 Testing is done at the handler level. A sample [test_env](./src/handlers/tests/test_env.rs) has been provided. Testing functions can be added to the test environment to call specific handlers, using the `TestEnv`'s underlieing `deps/info/env`. Seperate testing files are made to test various functionality, and user flows.
 
+## Code Coverage Setup
+
+### Steps to Set Up Code Coverage for Rust Smart Contracts
+0. **If the following steps don't work you may need to install `openssl`**
+   ```sh
+   sudo apt-get update
+   sudo apt-get install pkg-config libssl-dev
+   ```
+
+1. **Install `cargo-tarpaulin`**:
+   ```sh
+   cargo install cargo-tarpaulin
+   ```
+
+2. **Run the Tests**:
+   ```sh
+   make test
+   ```
+
+3. **Generate the Coverage Report**:
+   ```sh
+   make coverage
+   ```
+
+4. **Open the Coverage Report**:
+   ```sh
+   make open-coverage
+   ```
+
 ## Schema
 ```Makefile
 make schema

@@ -84,7 +84,7 @@ fn parse_price_postings(params: &HttpProviderParamsV2) -> Result<Vec<PricePostin
 
         // Access the first element in the quotes vector and extract the price
         for quote in price_info.quotes() {
-            price_postings.push( PricePosting::new(quote.quote().USD().price().clone(), convert_timestamp_to_unix(quote.timestamp()).unwrap()));
+            price_postings.push( PricePosting::new(quote.quote().USD().price().clone(), convert_timestamp_to_unix(quote.timestamp())?));
         }
     }
     Ok(price_postings)
