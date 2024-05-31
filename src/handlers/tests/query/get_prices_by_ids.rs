@@ -11,15 +11,18 @@ mod tests {
         data::price_posting::PricePosting,
         handlers::tests::{
             constants::{
-                CLEAN_VALID_PARAMETERS, VALID_CONTEXT, VALID_EPOCH, VALID_IDENTIFIER, VALID_OWNER, VALID_PROVIDER, VALID_SIGNATURES, VALID_TIMESTAMP
-            }, query::get_price_command::get_price_command, test_env::tests::TestEnv
+                CLEAN_VALID_PARAMETERS, VALID_CONTEXT, VALID_EPOCH, VALID_IDENTIFIER, VALID_OWNER,
+                VALID_PROVIDER, VALID_SIGNATURES, VALID_TIMESTAMP,
+            },
+            query::get_price_command::get_price_command,
+            test_env::tests::TestEnv,
         },
         msgs::execute::commands::post_price::PostPrice,
     };
 
     //////TESTS////////
     #[test]
-    fn get_prices_by_ids_one_posted() {
+    fn get_prices_by_ids_one_posted_one_not() {
         let mut test_env = TestEnv::new();
         test_env.initialize();
         let claim_info = ClaimInfo::new(
@@ -42,7 +45,7 @@ mod tests {
 
         let price = PricePosting::new(Decimal::from_str("66024.62150979548").unwrap(), 1715811300);
 
-        let ids = vec![1715811300];
+        let ids = vec![1715811300, 1715811304];
         let prices = vec![price];
         test_env.get_prices_by_ids_success(prices, ids);
     }
@@ -51,7 +54,7 @@ mod tests {
     fn get_prices_by_ids_multiple_posted() {
         let mut test_env = TestEnv::new();
         test_env.initialize();
-        
+
         test_env.post_price_success(get_price_command(1));
         test_env.post_price_success(get_price_command(2));
         test_env.post_price_success(get_price_command(3));
@@ -63,7 +66,7 @@ mod tests {
         let ids = vec![1715811300, 1715811600, 1715811900];
 
         let prices = vec![price, price2, price3];
-        test_env.get_prices_by_ids_success(prices, ids);    
+        test_env.get_prices_by_ids_success(prices, ids);
     }
 
     #[test]
@@ -75,5 +78,4 @@ mod tests {
 
         test_env.get_prices_by_ids_failure(ids);
     }
-
 }

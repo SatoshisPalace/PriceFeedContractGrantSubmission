@@ -6,13 +6,16 @@ use sp_secret_toolkit::{macros::identifiable::Identifiable, reclaim::data::claim
 use crate::{
     constants::{EXPECTED_BASE_URL_WITH_PATH, EXPECTED_METHOD, EXPECTED_QUERY_PARAMS},
     data::{most_recent_price_posting::MOST_RECENT_PRICE_POSTING, price_posting::PricePosting},
-    error::price_posting_error::PricePostingError, models::price_data::PriceInfo,
+    error::price_posting_error::PricePostingError,
+    models::price_data::PriceInfo,
 };
 
-use sp_secret_toolkit::reclaim::{services::http_provider_params_service::{
-    assert_base_url_with_path_matches, assert_method_matches,
-    assert_query_param_keys_and_values_match}, data::http_provider_params_v2::HttpProviderParamsV2,
-
+use sp_secret_toolkit::reclaim::{
+    data::http_provider_params_v2::HttpProviderParamsV2,
+    services::http_provider_params_service::{
+        assert_base_url_with_path_matches, assert_method_matches,
+        assert_query_param_keys_and_values_match,
+    },
 };
 
 use super::time_service::convert_timestamp_to_unix;
@@ -24,7 +27,7 @@ pub fn add_price_posting(
     let params = HttpProviderParamsV2::from_json(proof.claimInfo().parameters())?;
     validate_params(&params)?;
     let price_postings = parse_price_postings(&params)?;
-    
+
     for price_posting in price_postings {
         price_posting.keymap_save(storage)?;
         MOST_RECENT_PRICE_POSTING.save(storage, &price_posting.id())?;
@@ -58,21 +61,19 @@ pub fn get_list_of_price_postings(
     storage: &dyn Storage,
     ids: Vec<u64>,
 ) -> Result<Vec<PricePosting>, PricePostingError> {
-    ids
+    Ok(ids
         .into_iter()
-        .map(|id| get_price_posting(storage, &id))
-        .collect()
+        .filter_map(|id| get_price_posting(storage, &id).ok())
+        .collect())
 }
 
-fn get_price_posting(
-    storage: &dyn Storage, 
-    id: &u64
-) -> Result<PricePosting, PricePostingError> {
-    PricePosting::keymap_get_by_id(storage, id)
-        .ok_or(PricePostingError::PriceNotFound)
+fn get_price_posting(storage: &dyn Storage, id: &u64) -> Result<PricePosting, PricePostingError> {
+    PricePosting::keymap_get_by_id(storage, id).ok_or(PricePostingError::PriceNotFound)
 }
 
-fn parse_price_postings(params: &HttpProviderParamsV2) -> Result<Vec<PricePosting>, PricePostingError> {
+fn parse_price_postings(
+    params: &HttpProviderParamsV2,
+) -> Result<Vec<PricePosting>, PricePostingError> {
     let mut price_postings: Vec<PricePosting> = vec![];
     for match_data in params.responseMatches() {
         // Handle parsing error with specific error type
@@ -84,7 +85,10 @@ fn parse_price_postings(params: &HttpProviderParamsV2) -> Result<Vec<PricePostin
 
         // Access the first element in the quotes vector and extract the price
         for quote in price_info.quotes() {
-            price_postings.push( PricePosting::new(quote.quote().USD().price().clone(), convert_timestamp_to_unix(quote.timestamp())?));
+            price_postings.push(PricePosting::new(
+                quote.quote().USD().price().clone(),
+                convert_timestamp_to_unix(quote.timestamp())?,
+            ));
         }
     }
     Ok(price_postings)
