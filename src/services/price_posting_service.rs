@@ -4,7 +4,7 @@ use cosmwasm_std::Storage;
 use sp_secret_toolkit::{macros::identifiable::Identifiable, reclaim::data::claim::Proof};
 
 use crate::{
-    constants::{EXPECTED_BASE_URL_WITH_PATH, EXPECTED_METHOD, EXPECTED_QUERY_PARAMS},
+    constants::{EXPECTED_BASE_URL_WITH_PATH, EXPECTED_METHOD, EXPECTED_QUERY_PARAMS, TIME_END},
     data::{most_recent_price_posting::MOST_RECENT_PRICE_POSTING, price_posting::PricePosting},
     error::price_posting_error::PricePostingError,
     models::price_data::PriceInfo,
@@ -83,13 +83,11 @@ fn parse_price_postings(
             }
         })?;
 
-        // Access the first element in the quotes vector and extract the price
-        for quote in price_info.quotes() {
-            price_postings.push(PricePosting::new(
-                quote.quote().USD().price().clone(),
-                convert_timestamp_to_unix(quote.timestamp())?,
-            ));
-        }
+        let timestamp = params.get_query_param(TIME_END.to_owned()).unwrap();
+
+        let time = convert_timestamp_to_unix(timestamp.as_str()).unwrap();
+        let price_posting = PricePosting::new(*price_info.price(), time);
+        price_postings.push(price_posting);
     }
     Ok(price_postings)
 }

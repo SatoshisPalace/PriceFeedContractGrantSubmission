@@ -1,13 +1,21 @@
 use crate::{constants::DAYS_IN_MONTHS, error::price_posting_error::PricePostingError};
+use urlencoding::decode;
 
 pub fn convert_timestamp_to_unix(timestamp: &str) -> Result<u64, PricePostingError> {
+    let decoded_timestamp = decode(timestamp)
+        .map_err(|e| format!("Failed to decode timestamp: {}", e))
+        .unwrap()
+        .into_owned();
+
     // Remove the trailing 'Z' character
-    let datetime = timestamp.strip_suffix('Z').unwrap();
+    let datetime = decoded_timestamp.strip_suffix('Z').unwrap();
 
     // Split the datetime into date and time parts
     let date_time_parts: Vec<&str> = datetime.split('T').collect();
     if date_time_parts.len() != 2 {
-        return Err(PricePostingError::PriceTypeError { error: "Timestamp formatted incorrectly".to_string() });
+        return Err(PricePostingError::PriceTypeError {
+            error: "Timestamp formatted incorrectly".to_string(),
+        });
     }
 
     // Split the date part into year, month, and day
@@ -17,7 +25,9 @@ pub fn convert_timestamp_to_unix(timestamp: &str) -> Result<u64, PricePostingErr
 
     // Check if the date and time parts have the correct lengths
     if date_parts.len() != 3 || time_parts.len() != 3 {
-        return Err(PricePostingError::PriceTypeError { error: "Timestamp formatted incorrectly".to_string() });
+        return Err(PricePostingError::PriceTypeError {
+            error: "Timestamp formatted incorrectly".to_string(),
+        });
     }
 
     // Parse the year, month, and day from the date parts

@@ -11,8 +11,11 @@ mod tests {
         data::price_posting::PricePosting,
         handlers::tests::{
             constants::{
-                CLEAN_VALID_PARAMETERS, VALID_CONTEXT, VALID_EPOCH, VALID_IDENTIFIER, VALID_OWNER, VALID_PROVIDER, VALID_SIGNATURES, VALID_TIMESTAMP
-            }, query::get_price_command::get_price_command, test_env::tests::TestEnv
+                CLEAN_VALID_PARAMETERS, VALID_CONTEXT, VALID_EPOCH, VALID_IDENTIFIER, VALID_OWNER,
+                VALID_PROVIDER, VALID_SIGNATURES, VALID_TIMESTAMP,
+            },
+            query::get_price_command::get_price_command,
+            test_env::tests::TestEnv,
         },
         msgs::execute::commands::post_price::PostPrice,
     };
@@ -40,7 +43,7 @@ mod tests {
         let command = PostPrice { proof };
         test_env.post_price_success(command);
 
-        let price = PricePosting::new(Decimal::from_str("66024.62150979548").unwrap(), 1715811300);
+        let price = PricePosting::new(Decimal::from_str("64860.13819338009").unwrap(), 1718827200);
         test_env.get_most_recent_price_success(price);
     }
 
@@ -48,14 +51,12 @@ mod tests {
     fn get_most_recent_price_posted_multiple_posted() {
         let mut test_env = TestEnv::new();
         test_env.initialize();
-        
 
         test_env.post_price_success(get_price_command(1));
         test_env.post_price_success(get_price_command(2));
         test_env.post_price_success(get_price_command(3));
 
-
-        let price = PricePosting::new(Decimal::from_str("66064.62150979548").unwrap(), 1715811900);
+        let price = PricePosting::new(Decimal::from_str("64860.13819338009").unwrap(), 1718827800);
         test_env.get_most_recent_price_success(price);
     }
 
@@ -65,7 +66,4 @@ mod tests {
         test_env.initialize();
         test_env.get_most_recent_price_failure();
     }
-
 }
-
-

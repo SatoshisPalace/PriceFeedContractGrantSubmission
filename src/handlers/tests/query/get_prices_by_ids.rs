@@ -43,9 +43,9 @@ mod tests {
         let command = PostPrice { proof };
         test_env.post_price_success(command);
 
-        let price = PricePosting::new(Decimal::from_str("66024.62150979548").unwrap(), 1715811300);
+        let price = PricePosting::new(Decimal::from_str("64860.13819338009").unwrap(), 1718827200);
 
-        let ids = vec![1715811300, 1715811304];
+        let ids = vec![1718827200, 1718827500];
         let prices = vec![price];
         test_env.get_prices_by_ids_success(prices, ids);
     }
@@ -59,11 +59,11 @@ mod tests {
         test_env.post_price_success(get_price_command(2));
         test_env.post_price_success(get_price_command(3));
 
-        let price = PricePosting::new(Decimal::from_str("66024.62150979548").unwrap(), 1715811300);
-        let price2 = PricePosting::new(Decimal::from_str("66044.62150979548").unwrap(), 1715811600);
-        let price3 = PricePosting::new(Decimal::from_str("66064.62150979548").unwrap(), 1715811900);
+        let price = PricePosting::new(Decimal::from_str("64860.13819338009").unwrap(), 1718827200);
+        let price2 = PricePosting::new(Decimal::from_str("64860.13819338009").unwrap(), 1718827500);
+        let price3 = PricePosting::new(Decimal::from_str("64860.13819338009").unwrap(), 1718827800);
 
-        let ids = vec![1715811300, 1715811600, 1715811900];
+        let ids = vec![1718827200, 1718827500, 1718827800];
 
         let prices = vec![price, price2, price3];
         test_env.get_prices_by_ids_success(prices, ids);
