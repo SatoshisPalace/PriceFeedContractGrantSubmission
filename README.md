@@ -76,3 +76,4 @@ Msgs are what a user sends to the smart contract to perform different operations
 Responses are what the smart-contract will send back to the user. [ExecuteResponses](./src/responses/execute/execute_response.rs) and [QueryResponses](./src/responses/query/query_response.rs), should be aggregated under an enum.
 
 Why are messages and responses seperated into individual structs? In order to simplify the maintenance of the Contract entry points, individual msgs are help in structs and aggregated under enums, this allows `commands` (individual structs) to be passed to their handlers, Allowing for changes in command paramters to affect only the handler. In addition this makes serialization to json schema and finally into type script a much simpler process.
+# PriceFeedContractGrantSubmission
